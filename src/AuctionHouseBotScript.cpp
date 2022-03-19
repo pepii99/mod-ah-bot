@@ -1,6 +1,19 @@
 /*
- * Copyright (C) 2016+ AzerothCore <www.azerothcore.org>, released under GNU AGPL v3 license: https://github.com/azerothcore/azerothcore-wotlk/blob/master/LICENSE-AGPL3
-*/
+ * This file is part of the AzerothCore Project. See AUTHORS file for Copyright information
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Affero General Public License as published by the
+ * Free Software Foundation; either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptMgr.h"
 #include "AuctionHouseBot.h"
@@ -16,13 +29,13 @@ public:
 
     void OnBeforeConfigLoad(bool /*reload*/) override
     {
-        auctionbot->InitializeConfiguration();
+        sAHBot->InitializeConfiguration();
     }
 
     void OnStartup() override
     {
         LOG_INFO("server.loading", "Initialize AuctionHouseBot...");
-        auctionbot->Initialize();
+        sAHBot->Initialize();
     }
 };
 
@@ -33,7 +46,7 @@ public:
 
     void OnBeforeAuctionHouseMgrSendAuctionSuccessfulMail(AuctionHouseMgr* /*auctionHouseMgr*/, AuctionEntry* /*auction*/, Player* owner, uint32& /*owner_accId*/, uint32& /*profit*/, bool& sendNotification, bool& updateAchievementCriteria, bool& /*sendMail*/) override
     {
-        if (owner && owner->GetGUID().GetCounter() == auctionbot->GetAHBplayerGUID())
+        if (owner && owner->GetGUID().GetCounter() == sAHBot->GetAHBplayerGUID())
         {
             sendNotification = false;
             updateAchievementCriteria = false;
@@ -42,29 +55,29 @@ public:
 
     void OnBeforeAuctionHouseMgrSendAuctionExpiredMail(AuctionHouseMgr* /*auctionHouseMgr*/, AuctionEntry* /*auction*/, Player* owner, uint32& /*owner_accId*/, bool& sendNotification, bool& /*sendMail*/) override
     {
-        if (owner && owner->GetGUID().GetCounter() == auctionbot->GetAHBplayerGUID())
+        if (owner && owner->GetGUID().GetCounter() == sAHBot->GetAHBplayerGUID())
             sendNotification = false;
     }
 
     void OnBeforeAuctionHouseMgrSendAuctionOutbiddedMail(AuctionHouseMgr* /*auctionHouseMgr*/, AuctionEntry* auction, Player* oldBidder, uint32& /*oldBidder_accId*/, Player* newBidder, uint32& newPrice, bool& /*sendNotification*/, bool& /*sendMail*/) override
     {
         if (oldBidder && !newBidder)
-            oldBidder->GetSession()->SendAuctionBidderNotification(auction->GetHouseId(), auction->Id, ObjectGuid::Create<HighGuid::Player>(auctionbot->GetAHBplayerGUID()), newPrice, auction->GetAuctionOutBid(), auction->item_template);
+            oldBidder->GetSession()->SendAuctionBidderNotification(auction->GetHouseId(), auction->Id, ObjectGuid::Create<HighGuid::Player>(sAHBot->GetAHBplayerGUID()), newPrice, auction->GetAuctionOutBid(), auction->item_template);
     }
 
     void OnAuctionAdd(AuctionHouseObject* /*ah*/, AuctionEntry* auction) override
     {
-        auctionbot->IncrementItemCounts(auction);
+        sAHBot->IncrementItemCounts(auction);
     }
 
     void OnAuctionRemove(AuctionHouseObject* /*ah*/, AuctionEntry* auction) override
     {
-        auctionbot->DecrementItemCounts(auction, auction->item_template);
+        sAHBot->DecrementItemCounts(auction, auction->item_template);
     }
 
     void OnBeforeAuctionHouseMgrUpdate() override
     {
-        auctionbot->Update();
+        sAHBot->Update();
     }
 };
 
@@ -75,7 +88,7 @@ public:
 
     void OnBeforeMailDraftSendMailTo(MailDraft* /*mailDraft*/, MailReceiver const& receiver, MailSender const& sender, MailCheckMask& /*checked*/, uint32& /*deliver_delay*/, uint32& /*custom_expiration*/, bool& deleteMailItemsFromDB, bool& sendMail) override
     {
-        if (receiver.GetPlayerGUIDLow() == auctionbot->GetAHBplayerGUID())
+        if (receiver.GetPlayerGUIDLow() == sAHBot->GetAHBplayerGUID())
         {
             if (sender.GetMailMessageType() == MAIL_AUCTION)        // auction mail with items
                 deleteMailItemsFromDB = true;

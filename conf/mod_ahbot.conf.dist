@@ -1,15 +1,5 @@
-[worldserver]
-
 ###############################################################################
 # AUCTION HOUSE BOT SETTINGS
-#
-#    AuctionHouseBot.DEBUG
-#        Enable/Disable Debugging output
-#    Default 0 (disabled)
-#
-#    AuctionHouseBot.DEBUG_FILTERS
-#        Enable/Disable Debugging output from Filters
-#    Default 0 (disabled)
 #
 #    AuctionHouseBot.EnableSeller
 #        Enable/Disable the part of AHBot that puts items up for auction
@@ -41,8 +31,6 @@
 #
 ###############################################################################
 
-AuctionHouseBot.DEBUG = 0
-AuctionHouseBot.DEBUG_FILTERS = 0
 AuctionHouseBot.EnableSeller = 0
 AuctionHouseBot.EnableBuyer = 0
 AuctionHouseBot.UseBuyPriceForSeller = 0
