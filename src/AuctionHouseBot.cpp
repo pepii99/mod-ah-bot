@@ -382,7 +382,6 @@ void AuctionHouseBot::AddNewAuctionBuyerBotBidCallback(std::shared_ptr<Player> p
         if ((currentprice + auction->GetAuctionOutBid()) > bidprice)
             bidprice = currentprice + auction->GetAuctionOutBid();
 
-
         LOG_DEBUG("module.ahbot", "-------------------------------------------------");
         LOG_DEBUG("module.ahbot", "AHBuyer: Info for Auction #{}:", auction->Id);
         LOG_DEBUG("module.ahbot", "AHBuyer: AuctionHouse: {}", auction->GetHouseId());

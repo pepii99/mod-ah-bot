@@ -41,7 +41,7 @@ public:
     ~AHBConfig() = default;
 
     AHBConfig(uint32 ahid);
-    
+
     inline uint32 GetAuctionHouseID()
     {
         return _auctionHouseID;
