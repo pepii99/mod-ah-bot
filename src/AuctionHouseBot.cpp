@@ -22,6 +22,7 @@
 #include "Player.h"
 #include "WorldSession.h"
 #include "GameTime.h"
+#include "DatabaseEnv.h"
 #include "StringConvert.h"
 #include "StringFormat.h"
 #include <vector>
