@@ -20,6 +20,8 @@
 #include "ItemTemplate.h"
 #include <numeric>
 
+#include "Log.h"
+
 AHBConfig::AHBConfig(uint32 ahid)
 {
     _auctionHouseID = ahid;
@@ -61,25 +63,16 @@ void AHBConfig::SetPercentages(std::array<uint32, AHB_MAX_QUALITY>& percentages)
     }
     else if (totalPercent != 100)
     {
-        _itemsPercent[ITEM_QUALITY_POOR]            = 0;
-        _itemsPercent[ITEM_QUALITY_NORMAL]          = 27;
-        _itemsPercent[ITEM_QUALITY_UNCOMMON]        = 12;
-        _itemsPercent[ITEM_QUALITY_RARE]            = 10;
-        _itemsPercent[ITEM_QUALITY_EPIC]            = 1;
-        _itemsPercent[ITEM_QUALITY_LEGENDARY]       = 0;
-        _itemsPercent[ITEM_QUALITY_ARTIFACT]        = 0;
+        // re-normalize all percentages
+        const float fixMultiplier = 100.f / static_cast<float>(totalPercent);
 
-        _itemsPercent[AHB_ITEM_QUALITY_POOR]        = 0;
-        _itemsPercent[AHB_ITEM_QUALITY_NORMAL]      = 10;
-        _itemsPercent[AHB_ITEM_QUALITY_UNCOMMON]    = 30;
-        _itemsPercent[AHB_ITEM_QUALITY_RARE]        = 8;
-        _itemsPercent[AHB_ITEM_QUALITY_EPIC]        = 2;
-        _itemsPercent[AHB_ITEM_QUALITY_LEGENDARY]   = 0;
-        _itemsPercent[AHB_ITEM_QUALITY_ARTIFACT]    = 0;
+        for (auto& it : percentages)
+            it *= fixMultiplier;
+
+        LOG_WARN("module.ahbot", "AHConfig: Percentages don't add up to 100 (was {}), they have been auto-normalized.", totalPercent);
     }
 
-    for (size_t i = 0; i < percentages.size(); i++)
-        _itemsPercent[i] = percentages[i];
+    std::copy_n(percentages.begin(), AHB_MAX_QUALITY, _itemsPercent.begin());
 
     CalculatePercents();
 }

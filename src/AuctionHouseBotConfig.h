@@ -15,8 +15,12 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef AUCTION_HOUSE_BOT_CONFIG_H
+#define AUCTION_HOUSE_BOT_CONFIG_H
+
 #include "Define.h"
 #include "Duration.h"
+#include "SharedDefines.h"
 #include <array>
 
 enum AHItemQualities
@@ -167,3 +171,5 @@ private:
     std::array<uint32, AHB_DEFAULT_QUALITY_SIZE> _maxPrice{};
     std::array<uint32, AHB_MAX_QUALITY> _itemsCount{};
 };
+
+#endif // AUCTION_HOUSE_BOT_CONFIG_H
