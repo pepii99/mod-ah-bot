@@ -2574,7 +2574,7 @@ void AHBConfig::InitializeBins()
             continue;
         }
 
-        if (itr->second.Bonding == BIND_WHEN_EQUIPPED && !Bind_When_Equipped)
+        if (itr->second.Bonding == BIND_WHEN_EQUIPED && !Bind_When_Equipped)
         {
             continue;
         }
